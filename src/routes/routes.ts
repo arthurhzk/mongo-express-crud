@@ -1,5 +1,5 @@
-const router = express.Router();
 import express from "express";
+const router = express.Router();
 import {
   getProducts,
   getProductById,

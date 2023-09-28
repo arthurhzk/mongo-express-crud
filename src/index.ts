@@ -1,25 +1,27 @@
 import express from "express";
-import http from "http";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import compression from "compression";
 import cors from "cors";
 import mongoose from "mongoose";
-const router = express.Router();
+import routes from "./routes/routes";
 const app = express();
+const port = 8000;
 
 app.use(
   cors({
     credentials: true,
   })
 );
-const PORT = process.env.PORT || 8000;
 app.use(compression());
 app.use(cookieParser());
 app.use(bodyParser.json());
-const server = http.createServer(app);
-server.listen(PORT, () => {
-  console.log("Server is running on port 8000");
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use("/api", routes);
+
+app.get("/", (req, res) => {
+  res.send("Hello, world!");
 });
 
 const mongoURL =
@@ -34,4 +36,6 @@ mongoose.connection.on("error", (err) => {
   console.log("Error connecting to mongo", err);
 });
 
-app.use("/api", router);
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
